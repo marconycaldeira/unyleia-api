@@ -3,85 +3,63 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreAuthors;
+use App\Http\Requests\UpdateAuthors;
 use App\Models\Author;
 
 class AuthorsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $autors = Author::get();
-        return $autors;
+        $authors = Author::get();
+        return $authors;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(StoreAuthors $request)
     {
-        //
+        try{
+            $author = Author::create([
+                'name' => $request->name,
+                'year_of_birth' => $request->year_of_birth,
+                'gender' => $request->gender,
+                'nationality' => $request->nationality
+            ]);
+
+            return $author;
+        }catch(\Exception $e){
+            return response()->json('Erro ao salvar autor. Por favor, verifique os campos informados e tente novamente', 400);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function update(UpdateAuthors $request, $id)
     {
-        //
+        try{
+            $author = Author::find($id);
+            $author->update([
+                'name' => $request->name,
+                'year_of_birth' => $request->year_of_birth,
+                'gender' => $request->gender,
+                'nationality' => $request->nationality
+            ]);
+
+            return response()->json($author);
+        }catch(\Exception $e){
+            return response()->json('Erro ao salvar autor. Por favor, verifique os campos informados e tente novamente', 400);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+
+        try{
+            $author = Author::find($id);
+            $author->delete();
+
+            return response()->json($author);
+        }catch(\Exception $e){
+            return response()->json('Houve um erro ao tentar excluir, por gentileza, tente novamente', 400);
+        }
+
     }
 }
