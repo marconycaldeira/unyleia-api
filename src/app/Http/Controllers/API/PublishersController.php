@@ -4,9 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Publishe;
+use App\Models\Publisher;
 
-class PublishesController extends Controller
+class PublishersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class PublishesController extends Controller
      */
     public function index()
     {
-        $publishes = Publishe::get();
-        return $publishes;
+        $publishers = Publisher::get();
+        return $publishers;
     }
 
     /**

@@ -15,7 +15,7 @@ class BooksController extends Controller
      */
     public function index()
     {
-        $books = Book::get();
+        $books = Book::with('author')->with('genrer')->with('publisher')->get();
         return $books;
     }
 
@@ -28,19 +28,17 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = Book::create([
+            'name' => $request->name,
+            'publication_year' => $request->publication_year,
+            'genrer_id' => $request->genrer_id,
+            'author_id' => $request->author_id,
+            'publisher_id' => $request->publisher_id
+        ]);
+
+        return $book;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -51,7 +49,16 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $book = Book::find($id);
+        $book->update([
+            'name' => $request->name,
+            'publication_year' => $request->publication_year,
+            'genrer_id' => $request->genrer_id,
+            'author_id' => $request->author_id,
+            'publisher_id' => $request->publisher_id
+        ]);
+
+        return response()->json($book);
     }
 
     /**
@@ -62,6 +69,10 @@ class BooksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $book = Book::find($id);
+        $book->delete();
+
+        return response()->json($book);
+
     }
 }

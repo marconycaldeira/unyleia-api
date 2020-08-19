@@ -13,7 +13,7 @@ class CreatePublishesTable extends Migration
      */
     public function up()
     {
-        Schema::create('publishes', function (Blueprint $table) {
+        Schema::create('publishers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -28,6 +28,6 @@ class CreatePublishesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('publishes');
+        Schema::dropIfExists('publishers');
     }
 }

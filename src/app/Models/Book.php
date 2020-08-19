@@ -3,25 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'author_id',
         'genrer_id',
-        'publishe_id'
+        'publication_year',
+        'publisher_id',
     ];
 
     public function author(){
-        return belongsTo(Author::class);
+        return $this->belongsTo(Author::class);
     }
 
     public function genrer(){
-        return belongsTo(Genrer::class);
+        return $this->belongsTo(Genrer::class);
     }
 
-    public function publishe(){
-        return belongsTo(Publishe::class);
+    public function publisher(){
+        return $this->belongsTo(Publisher::class);
     }
 }

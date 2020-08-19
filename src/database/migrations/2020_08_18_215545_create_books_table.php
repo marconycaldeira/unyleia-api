@@ -16,14 +16,15 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('publication_year');
             $table->unsignedBigInteger('author_id');
             $table->foreign('author_id')->references('id')->on('authors');
             
             $table->unsignedBigInteger('genrer_id');
             $table->foreign('genrer_id')->references('id')->on('genrers');
 
-            $table->unsignedBigInteger('publishe_id');
-            $table->foreign('publishe_id')->references('id')->on('publishes');
+            $table->unsignedBigInteger('publisher_id');
+            $table->foreign('publisher_id')->references('id')->on('publishers');
 
             $table->timestamps();
             $table->softDeletes();

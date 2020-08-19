@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Publisher;
 
-class PublishesSeeder extends Seeder
+class PublishersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
