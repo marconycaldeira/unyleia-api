@@ -18,14 +18,14 @@ class Book extends Model
     ];
 
     public function author(){
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(Author::class)->withTrashed();
     }
 
     public function genrer(){
-        return $this->belongsTo(Genrer::class);
+        return $this->belongsTo(Genrer::class)->withTrashed();
     }
 
     public function publisher(){
-        return $this->belongsTo(Publisher::class);
+        return $this->belongsTo(Publisher::class)->withTrashed();
     }
 }

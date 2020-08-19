@@ -3,76 +3,66 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreBooks;
+use App\Http\Requests\UpdateBooks;
 use App\Models\Book;
 
 class BooksController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $books = Book::with('author')->with('genrer')->with('publisher')->get();
         return $books;
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreBooks $request)
     {
-        $book = Book::create([
-            'name' => $request->name,
-            'publication_year' => $request->publication_year,
-            'genrer_id' => $request->genrer_id,
-            'author_id' => $request->author_id,
-            'publisher_id' => $request->publisher_id
-        ]);
+        try{
+            $book = Book::create([
+                'name' => $request->name,
+                'publication_year' => $request->publication_year,
+                'genrer_id' => $request->genrer_id,
+                'author_id' => $request->author_id,
+                'publisher_id' => $request->publisher_id
+            ]);
 
-        return $book;
+            return $book;
+        }catch(\Exception $e){
+            return response()->json('Erro ao salvar livro. Por favor, verifique os campos informados e tente novamente', 400);
+        }
+    }
+
+    public function update(UpdateBooks $request, $id)
+    {
+        try{
+            $book = Book::find($id);
+            $book->update([
+                'name' => $request->name,
+                'publication_year' => $request->publication_year,
+                'genrer_id' => $request->genrer_id,
+                'author_id' => $request->author_id,
+                'publisher_id' => $request->publisher_id
+            ]);
+
+            return response()->json($book);
+        }catch(\Exception $e){
+            return response()->json('Erro ao salvar livro. Por favor, verifique os campos informados e tente novamente', 400);
+        }
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $book = Book::find($id);
-        $book->update([
-            'name' => $request->name,
-            'publication_year' => $request->publication_year,
-            'genrer_id' => $request->genrer_id,
-            'author_id' => $request->author_id,
-            'publisher_id' => $request->publisher_id
-        ]);
-
-        return response()->json($book);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $book = Book::find($id);
-        $book->delete();
 
-        return response()->json($book);
+        try{
+            $book = Book::find($id);
+            $book->delete();
+
+            return response()->json($book);
+        }catch(\Exception $e){
+            return response()->json('Houve um erro ao tentar excluir, por gentileza, tente novamente', 400);
+        }
 
     }
 }
