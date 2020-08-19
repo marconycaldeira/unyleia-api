@@ -2,67 +2,58 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Genrer;
+use App\Http\Requests\StoreGenrers;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateGenrers;
 
 class GenrersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $genres = Genrer::get();
-        return $genres;
+        $genrers = Genrer::get();
+        return $genrers;
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreGenrers $request)
     {
-        //
+        try{
+            $genrer = Genrer::create([
+                'name' => $request->name
+            ]);
+
+            return $genrer;
+        }catch(\Exception $e){
+            return response()->json('Erro ao salvar gênero. Por favor, verifique os campos informados e tente novamente', 400);
+        }
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(UpdateGenrers $request, $id)
     {
-        //
+        try{
+            $genrer = Genrer::find($id);
+            $genrer->update([
+                'name' => $request->name
+            ]);
+
+            return response()->json($genrer);
+        }catch(\Exception $e){
+            return response()->json('Erro ao salvar gênero. Por favor, verifique os campos informados e tente novamente', 400);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+
+        try{
+            $genrer = Genrer::find($id);
+            $genrer->delete();
+
+            return response()->json($genrer);
+        }catch(\Exception $e){
+            return response()->json('Houve um erro ao tentar excluir, por gentileza, tente novamente', 400);
+        }
+
     }
 }
